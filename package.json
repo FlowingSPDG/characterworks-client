@@ -1,6 +1,6 @@
 {
   "name": "characterworks-client",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "TypeScript HTTP client for controlling CharacterWorks from Node.js and related tools.",
   "license": "MIT",
   "author": "flowingspdg",

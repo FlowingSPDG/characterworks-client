@@ -1,17 +1,17 @@
 {
-  "name": "@streamdeckcw/characterworks-client",
+  "name": "characterworks-client",
   "version": "0.1.0",
   "description": "TypeScript HTTP client for controlling CharacterWorks from Node.js and related tools.",
   "license": "MIT",
   "author": "flowingspdg",
-  "main": "dist/index.cjs",
+  "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.mjs",
-      "require": "./dist/index.cjs"
+      "require": "./dist/index.js"
     }
   },
   "sideEffects": false,
@@ -38,12 +38,12 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/FlowingSPDG/characterworks-js.git"
+    "url": "git+https://github.com/FlowingSPDG/characterworks-client.git"
   },
   "bugs": {
-    "url": "https://github.com/FlowingSPDG/characterworks-js/issues"
+    "url": "https://github.com/FlowingSPDG/characterworks-client/issues"
   },
-  "homepage": "https://github.com/FlowingSPDG/characterworks-js#readme",
+  "homepage": "https://github.com/FlowingSPDG/characterworks-client#readme",
   "publishConfig": {
     "access": "public"
   },

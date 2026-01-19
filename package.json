@@ -1,0 +1,57 @@
+{
+  "name": "@streamdeckcw/characterworks-client",
+  "version": "0.1.0",
+  "description": "TypeScript HTTP client for controlling CharacterWorks from Node.js and related tools.",
+  "license": "MIT",
+  "author": "flowingspdg",
+  "main": "dist/index.cjs",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "sideEffects": false,
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "tsup src/index.ts --format esm,cjs --dts --sourcemap --clean",
+    "test": "vitest run",
+    "lint": "tsc -p tsconfig.json --noEmit",
+    "prepublishOnly": "npm run lint && npm test && npm run build"
+  },
+  "keywords": [
+    "characterworks",
+    "http",
+    "client",
+    "streamdeck",
+    "node"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FlowingSPDG/characterworks-js.git"
+  },
+  "bugs": {
+    "url": "https://github.com/FlowingSPDG/characterworks-js/issues"
+  },
+  "homepage": "https://github.com/FlowingSPDG/characterworks-js#readme",
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "@tsconfig/node20": "^20.1.2",
+    "@types/node": "~20.15.0",
+    "tsup": "^8.0.0",
+    "typescript": "^5.2.2",
+    "vitest": "^2.0.0"
+  }
+}

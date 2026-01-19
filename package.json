@@ -27,7 +27,9 @@
     "build": "tsup src/index.ts --format esm,cjs --dts --sourcemap --clean",
     "test": "vitest run",
     "lint": "tsc -p tsconfig.json --noEmit",
-    "prepublishOnly": "npm run lint && npm test && npm run build"
+    "prepublishOnly": "npm run lint && npm test && npm run build",
+    "example:basic": "tsx examples/basic-connection.ts",
+    "example:all": "tsx examples/all-commands.ts"
   },
   "keywords": [
     "characterworks",
@@ -51,6 +53,7 @@
     "@tsconfig/node20": "^20.1.2",
     "@types/node": "~20.15.0",
     "tsup": "^8.0.0",
+    "tsx": "^4.7.0",
     "typescript": "^5.2.2",
     "vitest": "^2.0.0"
   }

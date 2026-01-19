@@ -1,3 +1,4 @@
+import { z } from 'zod'
 import type {
 	CharacterWorksCommand,
 	CharacterWorksConfig,
@@ -12,6 +13,13 @@ import type {
 	ListMotionsWithIdsCommand,
 	ListMotionsWithIdsResponse,
 } from './types'
+import {
+	ListMotionsResponseSchema,
+	ListMotionsWithIdsResponseSchema,
+	ListLayersResponseSchema,
+	ListGridNamesResponseSchema,
+	ListGridCellsResponseSchema,
+} from './schemas'
 
 /**
  * Send a command to CharacterWorks over HTTP using the global fetch API.
@@ -48,9 +56,9 @@ export async function sendCommand(
 }
 
 /**
- * Parse a Response object to extract JSON data with type safety.
+ * Parse a Response object to extract JSON data with type safety and runtime validation.
  *
- * @throws {Error} If the response is not OK or if JSON parsing fails
+ * @throws {Error} If the response is not OK, if JSON parsing fails, or if validation fails
  */
 export async function parseResponse<T>(response: Response): Promise<T> {
 	if (!response.ok) {
@@ -59,8 +67,43 @@ export async function parseResponse<T>(response: Response): Promise<T> {
 	}
 
 	try {
-		return (await response.json()) as T
+		const data = await response.json()
+		return data as T
 	} catch (error) {
+		if (error instanceof Error) {
+			throw new Error(`Failed to parse JSON response: ${error.message}`)
+		}
+		throw error
+	}
+}
+
+/**
+ * Parse and validate a Response object using a Zod schema.
+ * This provides runtime type safety by validating the response structure.
+ *
+ * @param response - The Response object to parse
+ * @param schema - The Zod schema to validate against
+ * @returns The validated and typed data
+ * @throws {Error} If the response is not OK, if JSON parsing fails, or if validation fails
+ */
+export async function parseResponseWithSchema<T>(
+	response: Response,
+	schema: z.ZodSchema<T>
+): Promise<T> {
+	if (!response.ok) {
+		const text = await response.text()
+		throw new Error(`HTTP ${response.status} ${response.statusText}: ${text}`)
+	}
+
+	try {
+		const data = await response.json()
+		return schema.parse(data)
+	} catch (error) {
+		if (error instanceof z.ZodError) {
+			throw new Error(
+				`Response validation failed: ${error.errors.map((e: z.ZodIssue) => `${e.path.join('.')}: ${e.message}`).join(', ')}`
+			)
+		}
 		if (error instanceof Error) {
 			throw new Error(`Failed to parse JSON response: ${error.message}`)
 		}
@@ -80,53 +123,66 @@ export async function sendCommandAndParse<T>(
 }
 
 /**
- * Send a list_motions command and return the parsed response.
+ * Send a command and parse the response with Zod schema validation.
+ * This provides runtime type safety by validating the response structure.
+ */
+export async function sendCommandAndParseWithSchema<T>(
+	command: CharacterWorksCommand,
+	config: CharacterWorksConfig,
+	schema: z.ZodSchema<T>
+): Promise<T> {
+	const response = await sendCommand(command, config)
+	return parseResponseWithSchema(response, schema)
+}
+
+/**
+ * Send a list_motions command and return the parsed and validated response.
  */
 export async function sendListMotionsCommand(
 	config: CharacterWorksConfig
 ): Promise<ListMotionsResponse> {
 	const command: ListMotionsCommand = { action: 'list_motions' }
-	return sendCommandAndParse<ListMotionsResponse>(command, config)
+	return sendCommandAndParseWithSchema(command, config, ListMotionsResponseSchema)
 }
 
 /**
- * Send a list_motions_with_ids command and return the parsed response.
+ * Send a list_motions_with_ids command and return the parsed and validated response.
  */
 export async function sendListMotionsWithIdsCommand(
 	config: CharacterWorksConfig
 ): Promise<ListMotionsWithIdsResponse> {
 	const command: ListMotionsWithIdsCommand = { action: 'list_motions_with_ids' }
-	return sendCommandAndParse<ListMotionsWithIdsResponse>(command, config)
+	return sendCommandAndParseWithSchema(command, config, ListMotionsWithIdsResponseSchema)
 }
 
 /**
- * Send a list_layers command and return the parsed response.
+ * Send a list_layers command and return the parsed and validated response.
  */
 export async function sendListLayersCommand(
 	command: ListLayersCommand,
 	config: CharacterWorksConfig
 ): Promise<ListLayersResponse> {
-	return sendCommandAndParse<ListLayersResponse>(command, config)
+	return sendCommandAndParseWithSchema(command, config, ListLayersResponseSchema)
 }
 
 /**
- * Send a list_grid_names command and return the parsed response.
+ * Send a list_grid_names command and return the parsed and validated response.
  */
 export async function sendListGridNamesCommand(
 	config: CharacterWorksConfig
 ): Promise<ListGridNamesResponse> {
 	const command: ListGridNamesCommand = { action: 'list_grid_names' }
-	return sendCommandAndParse<ListGridNamesResponse>(command, config)
+	return sendCommandAndParseWithSchema(command, config, ListGridNamesResponseSchema)
 }
 
 /**
- * Send a list_grid_cells command and return the parsed response.
+ * Send a list_grid_cells command and return the parsed and validated response.
  */
 export async function sendListGridCellsCommand(
 	command: ListGridCellsCommand,
 	config: CharacterWorksConfig
 ): Promise<ListGridCellsResponse> {
-	return sendCommandAndParse<ListGridCellsResponse>(command, config)
+	return sendCommandAndParseWithSchema(command, config, ListGridCellsResponseSchema)
 }
 
 /**

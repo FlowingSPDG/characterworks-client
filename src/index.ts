@@ -54,7 +54,9 @@ export {
 export {
 	sendCommand,
 	parseResponse,
+	parseResponseWithSchema,
 	sendCommandAndParse,
+	sendCommandAndParseWithSchema,
 	sendListMotionsCommand,
 	sendListMotionsWithIdsCommand,
 	sendListLayersCommand,
@@ -63,4 +65,16 @@ export {
 	sendBatchCommands,
 	sendBatchCommandsWithResponses,
 } from './client'
+
+// Re-export Zod schemas for advanced use cases
+export {
+	ListMotionsResponseSchema,
+	ListMotionsWithIdsResponseSchema,
+	ListLayersResponseSchema,
+	ListGridNamesResponseSchema,
+	ListGridCellsResponseSchema,
+	MotionWithIdSchema,
+	LayerInfoSchema,
+	GridCellSchema,
+} from './schemas'
 

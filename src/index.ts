@@ -16,16 +16,65 @@ export type {
 	TriggerCommand,
 	SetTextCommand,
 	ActivateGridCommand,
+	ListMotionsCommand,
+	ListMotionsWithIdsCommand,
+	ListLayersCommand,
+	ListGridNamesCommand,
+	ListGridCellsCommand,
 	CharacterWorksCommand,
+	// Response types
+	ListMotionsResponse,
+	MotionWithId,
+	ListMotionsWithIdsResponse,
+	LayerInfo,
+	ListLayersResponse,
+	ListGridNamesResponse,
+	GridCell,
+	ListGridCellsResponse,
+	CharacterWorksResponse,
 } from './types'
 
 // Re-export all command creation functions
 export {
 	createTriggerCommand,
+	createEjectMotionsCommand,
+	createResumeMotionsCommand,
+	createRestartMotionsCommand,
+	createFinishAndRestartMotionsCommand,
 	createSetTextCommand,
 	createActivateGridCommand,
+	createListMotionsCommand,
+	createListMotionsWithIdsCommand,
+	createListLayersCommand,
+	createListGridNamesCommand,
+	createListGridCellsCommand,
 } from './commands'
 
-// Re-export the HTTP client function
-export { sendCommand } from './client'
+// Re-export the HTTP client functions
+export {
+	sendCommand,
+	parseResponse,
+	parseResponseWithSchema,
+	sendCommandAndParse,
+	sendCommandAndParseWithSchema,
+	sendListMotionsCommand,
+	sendListMotionsWithIdsCommand,
+	sendListLayersCommand,
+	sendListGridNamesCommand,
+	sendListGridCellsCommand,
+	sendBatchCommands,
+	sendBatchCommandsWithResponses,
+} from './client'
+
+// Re-export Zod schemas for advanced use cases
+export {
+	ListMotionsResponseSchema,
+	ListMotionsWithIdsResponseSchema,
+	ListLayersResponseSchema,
+	ListGridNamesResponseSchema,
+	ListGridCellsResponseSchema,
+	MotionWithIdSchema,
+	LayerInfoSchema,
+	GridCellSchema,
+} from './schemas'
 
